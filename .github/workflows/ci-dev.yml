@@ -1,0 +1,23 @@
+name: Build
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches: [ "dev" ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Push dev to main
+        run: |
+          git checkout main
+          git pull origin main
+          git merge --ff-only dev
+          git push origin main
